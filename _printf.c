@@ -1,6 +1,54 @@
-#include "main.h"
-
+#include "holberton.h"
 /**
+<<<<<<< HEAD
+  *_printf - prints formatted output.
+  *@format: input.
+  *
+  *Return: number of chars printed or -1.
+  */
+int _printf(const char *format, ...)
+{
+	va_list args;
+	int i, len;
+	int (*get_ptr)(va_list, int);
+
+	va_start(args, format);
+	if (!(format))
+		return (-1);
+	i = 0;
+	len = 0;
+	while (format && format[i])
+	{
+		if (format[i] == '%')
+		{
+			i++;
+			if (format[i] == '%')
+			{
+				len += _putchar(format[i]);
+				i++;
+				continue;
+			}
+			if (format[i] == '\0')
+				return (-1);
+			get_ptr = get_print_func(format[i]);
+			if (get_ptr != NULL)
+				len = get_ptr(args, len);
+			else
+			{
+				len += _putchar(format[i - 1]);
+				len += _putchar(format[i]);
+			}
+			i++;
+		}
+		else
+		{
+			len += _putchar(format[i]);
+			i++;
+		}
+	}
+	va_end(args);
+	return (len);
+=======
  * _printf - formatted output conversion and print data.
  * @format: input string.
  *
@@ -48,4 +96,5 @@ int _printf(const char *format, ...)
 	buffer[buff_count] = '\0';
 	print_buff(buffer, buff_count);
 	return (buff_count);
+>>>>>>> f60937945c81ffcec31f1c3316bba965c0a722d7
 }
