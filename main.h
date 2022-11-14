@@ -49,15 +49,29 @@ int prinnhex(va_list arguments, char *buf, unsigned int ibuf);
 int prinnupx(va_list arguments, char *buf, unsigned int ibuf);
 int prinsint(va_list arguments, char *buf, unsigned int ibuf);
 int (*get_print_func(const char *s, int index))(va_list, char *, unsigned int);
-int (*get_func(const char *s, int index))(va_list, char *, unsigned int)
+int (*get_func(const char *s, int index))(va_list, char *, unsigned int);
 int ev_print_func(const char *s, int index);
 unsigned int handl_buf(char *buf, char c, unsigned int ibuf);
-unsigned int handle_buffer(char *buffer, char c, unsigned int buf)
+unsigned int handle_buffer(char *buffer, char c, unsigned int buf);
 int print_buf(char *buf, unsigned int nbuf);
 char *fill_binary_array(char *binary, long int int_in, int isneg, int limit);
 char *fill_oct_array(char *bnr, char *oct);
 char *fill_long_oct_array(char *bnr, char *oct);
 char *fill_short_oct_array(char *bnr, char *oct);
 char *fill_hex_array(char *bnr, char *hex, int isupp, int limit);
+int print_address(va_list args, char *buffer, unsigned int buf);
+int print_binary(va_list args, char *buffer, unsigned int buf);
+int print_buffer(char *buffer, unsigned int buf);
+int print_character(va_list args, char *buffer, unsigned int buf);
+int print_func(const char *s, int index);
+int print_integer(va_list args, char *buffer, unsigned int buf);
+int print_long_integer(va_list args, char *buffer, unsigned int buf);
+int print_long_unt(va_list args, char *buffer, unsigned int buf);
+int print_non_chars(va_list args, char *buffer, unsigned int buf);
+int print_string(va_list args, char *buffer, unsigned int buf);
+int print_upx(va_list args, char *buffer, unsigned int buf);
+
+
+
 
 #endif /* MAIN_H */
