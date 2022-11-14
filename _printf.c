@@ -1,100 +1,64 @@
-#include "holberton.h"
+
+#include "main.h"
+
+void print_buffer(char buffer[], int *buff_ind);
+
 /**
-<<<<<<< HEAD
-  *_printf - prints formatted output.
-  *@format: input.
-  *
-  *Return: number of chars printed or -1.
-  */
-int _printf(const char *format, ...)
-{
-	va_list args;
-	int i, len;
-	int (*get_ptr)(va_list, int);
-
-	va_start(args, format);
-	if (!(format))
-		return (-1);
-	i = 0;
-	len = 0;
-	while (format && format[i])
-	{
-		if (format[i] == '%')
-		{
-			i++;
-			if (format[i] == '%')
-			{
-				len += _putchar(format[i]);
-				i++;
-				continue;
-			}
-			if (format[i] == '\0')
-				return (-1);
-			get_ptr = get_print_func(format[i]);
-			if (get_ptr != NULL)
-				len = get_ptr(args, len);
-			else
-			{
-				len += _putchar(format[i - 1]);
-				len += _putchar(format[i]);
-			}
-			i++;
-		}
-		else
-		{
-			len += _putchar(format[i]);
-			i++;
-		}
-	}
-	va_end(args);
-	return (len);
-=======
- * _printf - formatted output conversion and print data.
- * @format: input string.
- *
- * Return: number of chars printed.
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chars.
  */
-
 int _printf(const char *format, ...)
 {
-	int i = 0, j = 0, buff_count = 0, prev_buff_count = 0;
-	char buffer[2000];
-	va_list arg;
-	call_t container[] = {
-		{'c', parse_char}, {'s', parse_str}, {'i', parse_int}, {'d', parse_int},
-		{'%', parse_perc}, {'b', parse_bin}, {'o', parse_oct}, {'x', parse_hex},
-		{'X', parse_X}, {'u', parse_uint}, {'R', parse_R13}, {'r', parse_rev},
-		{'\0', NULL}
-	};
+	int i, printed = 0, printed_chars = 0;
+	int flags, width, precision, size, buff_ind = 0;
+	va_list list;
+	char buffer[BUFF_SIZE];
 
-	if (!format)
+	if (format == NULL)
 		return (-1);
-	va_start(arg, format);
-	while (format && format[i] != '\0')
+	va_start(list, format);
+	for (i = 0; format && format[i] != '\0'; i++)
 	{
-		if (format[i] == '%')
+		if (format[i] != '%')
 		{
-			i++, prev_buff_count = buff_count;
-			for (j = 0; container[j].t != '\0'; j++)
-			{
-				if (format[i] == '\0')
-					break;
-				if (format[i] == container[j].t)
-				{
-					buff_count = container[j].f(buffer, arg, buff_count);
-					break;
-				}
-			}
-			if (buff_count == prev_buff_count && format[i])
-				i--, buffer[buff_count] = format[i], buff_count++;
+			buffer[buff_ind++] = format[i];
+			if (buff_ind == BUFF_SIZE)
+
+				print_buffer(buffer, &buff_ind);
+			/* write(1, &format[i], 1);*/
+			printed_chars++;
 		}
 		else
-			buffer[buff_count] = format[i], buff_count++;
-		i++;
+		{
+			print_buffer(buffer, &buff_ind);
+			flags = get_flags(format, &i);
+			width = get_width(format, &i, list);
+			precision = get_precision(format, &i, list);
+			size = get_size(format, &i);
+			++i;
+			printed = handle_print(format, &i, list, buffer,
+				flags, width, precision, size);
+			if (printed == -1)
+				return (-1);
+			printed_chars += printed;
+		}
 	}
-	va_end(arg);
-	buffer[buff_count] = '\0';
-	print_buff(buffer, buff_count);
-	return (buff_count);
->>>>>>> f60937945c81ffcec31f1c3316bba965c0a722d7
+
+	print_buffer(buffer, &buff_ind);
+	va_end(list);
+	return (printed_chars);
+}
+
+/**
+ * print_buffer - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
+ */
+void print_buffer(char buffer[], int *buff_ind)
+{
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
+
+	*buff_ind = 0;
 }
