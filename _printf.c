@@ -48,7 +48,7 @@ int _printf(const char *format, ...)
 	}
 	va_end(args);
 	return (len);
-=======
+/*
  * _printf - formatted output conversion and print data.
  * @format: input string.
  *
@@ -96,5 +96,4 @@ int _printf(const char *format, ...)
 	buffer[buff_count] = '\0';
 	print_buff(buffer, buff_count);
 	return (buff_count);
->>>>>>> f60937945c81ffcec31f1c3316bba965c0a722d7
 }
